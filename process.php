@@ -17,10 +17,14 @@ $getAll =$pdo->prepare("SELECT * FROM crud_table");
 $getAll->execute();
 $data = $getAll->fetchAll();
 
+$location = '';
+$name = '';
+$id = 0;
+$update = false;
 if(isset($_POST['save'])){
     $name =  $_POST['name'];
     $location = $_POST['location'];
-$_SESSION ['message'] = "Record has been saved";
+    $_SESSION ['message'] = "Record has been saved";
     $_SESSION ['msg_type'] = "success";
     $stmt = $pdo->query("INSERT INTO crud_table (name,location) VALUES ('$name','$location')");
     header("location: index.php");
@@ -34,8 +38,26 @@ if(isset($_GET['delete'])){
     header("location: index.php");
 
 }
-/*$mysqli = new mysqli('jdbc:mysql://localhost:3306/crud','imane','123','crud')
-or die(mysqli_error($mysqli));*/
 
-/*  $mysqli->query("INSERT INTO data (name,location) VALUES ('$name','$location')")
-  or die($mysqli->error);*/
+if (isset($_GET['edit'])){
+    $id = $_GET['edit'];
+    $stmt = $pdo->prepare("SELECT * FROM crud_table WHERE id=:id");
+    $stmt->execute(['id' => $id]);
+        if($stmt == true){
+            $row = $stmt->fetch();
+            $name = $row['name'];
+            $location = $row['location'];
+            $update = true;
+        }
+    }
+
+if (isset($_POST['update'])){
+    $id= $_POST['id'];
+    $name= $_POST['name'];
+    $location= $_POST['location'];
+    $stmt = $pdo->query("UPDATE crud_table SET name='$name',location='$location' WHERE id=$id");
+    $_SESSION ['message'] = "Record has been updated";
+    $_SESSION ['msg_type'] = "success";
+    header("location: index.php");
+}
+

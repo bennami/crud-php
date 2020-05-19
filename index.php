@@ -17,6 +17,7 @@ ini_set("display_errors","1");
 <?php if (isset($_SESSION['message'])): ?>
 <div class="alert-<?=$_SESSION['msg_type'] ?>">
 <?php
+
 echo $_SESSION['message'];
 unset($_SESSION['message']);
 ?>
@@ -53,16 +54,21 @@ unset($_SESSION['message']);
 <div>
     <div class="row justify-content-center">
 <form action="process.php" method="POST">
+    <input type="hidden" name="id" value="<?php echo $id ?>">
     <div class="form-group">
     <label>name</label>
-    <input  class="form-control" type="text" name="name" value="enter your name">
+    <input  class="form-control" type="text" name="name"  value="<?php echo $name ?>" placeholder="enter your name">
     </div>
     <div class="form-group">
     <label>location</label>
-    <input class="form-control" type="text" name="location" value="enter your location">
+    <input class="form-control" type="text" name="location" value="<?php echo $location ?>" placeholder="enter your location">
     </div>
     <div class="form-group">
-    <button class="btn btn-primary" type="submit" name="save">save</button>
+        <?php if ($update == true):?>
+           <button class="btn btn-info" type="submit" name="update">Update</button>
+        <?php else:?>
+            <button class="btn btn-primary" type="submit" name="save">add</button>
+        <?php endif; ?>
     </div>
 </form>
 </div>
